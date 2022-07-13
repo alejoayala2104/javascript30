@@ -58,6 +58,30 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
+  // data-key is an attr that helps later with the finding of each audio according to its corresponding key.
+  window.addEventListener('keydown', playAudio);
+
+  function playAudio(){   
+    const audio = document.querySelector(`audio[data-key="${event.keyCode}"]`);
+    const key = document.querySelector(`.key[data-key="${event.keyCode}"]`)
+    if(!audio) return;
+    audio.currentTime = 0 //Regresa el sonido a tiempo 0 para que se pueda reproducir mientras hay audio reproduciendose.
+    audio.play();
+    key.classList.add("playing");
+    // In order to set the key to its original state it needs to wait until the transform transition is ended (when it's back on its place) and then proceed to remove the "playing" class from the key element.
+
+    function removeTransition(event){
+      // Validates that only the transform property is handled. Skip it if it's not a transform
+      if(event.propertyName !== 'transform') return;
+      
+      // this se refiere al elemento que provocó el evento, en este caso es la key que se presionó y el eventlistener se agregó en el siguiente forEach
+      this.classList.remove('playing');
+    }
+
+    // Add the event action to every key. 
+    const keys  = document.querySelectorAll(".key");
+    keys.forEach(key => key.addEventListener('transitionend',removeTransition));
+  }
 
 </script>
 
