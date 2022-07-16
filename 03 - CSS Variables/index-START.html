@@ -22,6 +22,17 @@
 
   <style>
 
+    :root{
+      --base: #ffc600;
+      --spacing: 10px;
+      --blur: 10px;
+    }
+
+    img{
+      padding: var(--spacing);
+      background: var(--base);
+      filter: blur(var(--blur));
+    }
     /*
       misc styles, nothing to do with CSS variables
     */
@@ -45,6 +56,31 @@
   </style>
 
   <script>
+
+    // querySelectorAll returns a NodeList. It's similar from an array, but it doesn't have the array methods like map, reduce, etc...
+    // To iteraet over a NodeList you should use forEach
+    const inputs = document.querySelectorAll('.controls input')
+    
+    function handleUpdate(){
+      // Prints the value of the element
+      // console.log(this.value)
+
+      // In the HTML, the range inputs have a data attribute named data-sizing, that sets the "px" at the end of the number
+      // To create a data attribute you need to follow this format: data-suffix, where suffix it's the name of the data attribute.
+
+      // dataset it's an object that contains all the data attributes of an element.
+      // This variable checks if an element has a sizing attribute or nothing
+      const suffix = this.dataset.sizing || '';
+
+      // This gets the whole root and edits the variable(name) with a value
+      document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix)
+    }
+
+    // Iterates over every input and adds an event with the handleUpdate function. 
+    inputs.forEach(input => input.addEventListener('change',handleUpdate))
+    inputs.forEach(input => input.addEventListener('mousemove',handleUpdate))
+
+
   </script>
 
 </body>
